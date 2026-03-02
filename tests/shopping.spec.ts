@@ -8,6 +8,7 @@ test.beforeEach(async ({ page }) => {
   let loginPage: LoginPage;
   let inventoryPage: InventoryPage;
   let cartPage: CartPage;
+  let checkoutPage: CheckoutPage;
 
   loginPage     = new LoginPage(page);
   inventoryPage = new InventoryPage(page);
@@ -20,7 +21,7 @@ test.beforeEach(async ({ page }) => {
   await inventoryPage.expectOnInventoryPage();
 });
 
-test('TC-S-08 | Checkout สำเร็จ — แสดงหน้า Order Complete', async () => {
+test('TC-S-08 | Checkout สำเร็จ — แสดงหน้า Order Complete', async ( { page } ) => {
 
   // 1. เพิ่มสินค้า
   await inventoryPage.addToCartByName('Sauce Labs Backpack');
