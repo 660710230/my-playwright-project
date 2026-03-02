@@ -1,0 +1,45 @@
+import { Page, Locator, expect } from '@playwright/test';  // ✅
+
+export class CartPage {
+  readonly page: Page;
+  readonly cartItems: Locator;
+  readonly checkoutButton: Locator;
+  // ✅ เปลี่ยนชื่อให้ไม่ชนกับ continueButton ใน CheckoutPage
+  readonly continueShoppingButton: Locator;
+
+  constructor(page: Page) {
+    this.page                   = page;
+    this.cartItems              = page.locator('.cart_item');
+    this.checkoutButton         = page.getByRole('button',
+      { name: 'Checkout' });
+    this.continueShoppingButton = page.getByRole('button',
+      { name: 'Continue Shopping' });
+  }
+
+  async clickCheckout() {
+    await this.checkoutButton.click();
+  }
+
+  // ✅ เพิ่ม method continueShopping()
+  async continueShopping() {
+    await this.continueShoppingButton.click();
+  }
+
+  async removeItemByName(name: string) {
+    const item = this.cartItems
+                    .filter({ hasText: name });
+    await item.getByRole('button',
+      { name: /remove/i }).click();
+  }
+
+  async expectCartEmpty() {
+    await expect(this.cartItems)
+          .toHaveCount(0);
+  }
+
+  async expectItemInCart(name: string) {
+    const item = this.cartItems
+                    .filter({ hasText: name });
+    await expect(item).toBeVisible();
+  }
+}
